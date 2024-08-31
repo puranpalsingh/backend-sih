@@ -3,13 +3,11 @@ import { PrismaClient } from "@prisma/client/extension";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, verify } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
-// @ts-ignore
-import formidable from 'formidable';
-// @ts-ignore
-import fs from 'fs';
+// // @ts-ignore
+// import formidable from 'formidable';
+// // @ts-ignore
+// import fs from 'fs';
 import { SignatureKey } from "hono/utils/jwt/jws";
-
-
 export const userRouter = new Hono<{
     Bindings : {
         DATABASE_URL : string;
@@ -46,7 +44,7 @@ userRouter.use('/api/v1/*', async(c, next) => {
 
 userRouter.post('/signup',async (c) => {
     const prisma = new PrismaClient({
-        datasourceUrl : c.env.DATABASE_URL,
+        datasourceUrl : c.env?.DATABASE_URL,
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
@@ -99,43 +97,43 @@ userRouter.post('signin' , async(c) => {
     });
 });
 
-userRouter.post('/upploadResume',async(c) => {
+// userRouter.post('/upploadResume',async(c) => {
 
-    const prisma = new PrismaClient({
-        datasourceUrl : c.env?.DATABASE_URL
-    }).$extends(withAccelerate());
+//     const prisma = new PrismaClient({
+//         datasourceUrl : c.env?.DATABASE_URL
+//     }).$extends(withAccelerate());
 
-    const form = new formidable.IncomingForm();
-    const userId = c.get('userId');
+//     const form = new formidable.IncomingForm();
+//     const userId = c.get('userId');
 
-    return new Promise((resolve, reject) => {
-        form.parse(c.req.raw, async (err : any , fields : any, files : any) => {
-          if (err) {
-            c.status(500);
-            return resolve(c.json({ error: 'Failed to parse form data' }, 500));
-          }
+//     return new Promise((resolve, reject) => {
+//         form.parse(c.req.raw, async (err : any , fields : any, files : any) => {
+//           if (err) {
+//             c.status(500);
+//             return resolve(c.json({ error: 'Failed to parse form data' }, 500));
+//           }
     
-          const file = files.file as formidable.File;
-          const fileData = fs.readFileSync(file.filepath);
+//           const file = files.file as formidable.File;
+//           const fileData = fs.readFileSync(file.filepath);
     
-          try {
-            const resume = await prisma.file.create({
-              data: {
-                fileName: file.originalFilename!,
-                data: fileData,
-                contentType: file.mimetype!,
-                userId: userId,
-              },
-            });
+//           try {
+//             const resume = await prisma.file.create({
+//               data: {
+//                 fileName: file.originalFilename!,
+//                 data: fileData,
+//                 contentType: file.mimetype!,
+//                 userId: userId,
+//               },
+//             });
     
-            resolve(c.json({ message: 'Resume uploaded successfully', resume }));
-          } catch (error) {
-            console.error(error);
-            c.status(500);
-            resolve(c.json({ error: 'Failed to upload resume' }, 500));
-          } finally {
-            fs.unlinkSync(file.filepath); 
-          }
-        });
-      });
-})
+//             resolve(c.json({ message: 'Resume uploaded successfully', resume }));
+//           } catch (error) {
+//             console.error(error);
+//             c.status(500);
+//             resolve(c.json({ error: 'Failed to upload resume' }, 500));
+//           } finally {
+//             fs.unlinkSync(file.filepath); 
+//           }
+//         });
+//       });
+// })

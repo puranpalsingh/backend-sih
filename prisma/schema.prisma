@@ -47,6 +47,5 @@ model Job {
   published Boolean @default(false)
   adminId  String
   admin Admin @relation(fields: [adminId], references: [id])
-
 }
 
