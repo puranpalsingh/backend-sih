@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, verify } from "hono/jwt";
 import { SignatureKey } from "hono/utils/jwt/jws";
@@ -38,7 +38,7 @@ adminRouter.use('/upload/*' , async(c, next) => {
 
 adminRouter.post('/signup', async(c) => {
     const prisma = new PrismaClient({
-        datasourceURL : c.env?.DATABASE_URL
+        datasourceUrl : c.env?.DATABASE_URL
     }).$extends(withAccelerate());
     const body = await c.req.json();
 
@@ -97,7 +97,7 @@ adminRouter.post('/signin', async(c) => {
 
 adminRouter.post('/job', async(c) => {
     const prisma = new PrismaClient({
-        datasourceUrl : c.env?.JWT_SECERT
+        datasourceUrl : c.env?.DATABASE_URL
     }).$extends(withAccelerate());
 
     const body = await c.req.json();

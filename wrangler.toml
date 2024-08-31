@@ -1,6 +1,8 @@
 name = "backend-hono"
 compatibility_date = "2024-08-30"
 
+
+
 [vars]
 MY_VAR = "my-variable"
 DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZDMyNjE2MjYtZmMzNi00ZTg0LWEyZDUtZjQyOTc4MDU2Nzk3IiwidGVuYW50X2lkIjoiNjRiNWU2YzNjNWZiNTNhN2JhNTA4MzBjN2U4MjFhZTA5NGQ2NTUxNjU5NDViMTBiOTkxOGU1YWRjZjJmMmVmYSIsImludGVybmFsX3NlY3JldCI6IjU4ZTQ3YTZmLWJhMmEtNDRhNy1hYzFkLTM3Yzg2OWJmNTA2MyJ9.qdjeB8rbgKKtP_7KPiEZyq0J1F4UBuGLnrY9gABBJ-Y"
