@@ -19,6 +19,7 @@ model User {
   password String 
   name String
   resume File[]
+  job Jobapplied[]
 }
 
 model File {
@@ -49,3 +50,10 @@ model Job {
   admin Admin @relation(fields: [adminId], references: [id])
 }
 
+model Jobapplied{
+  id String @id @default(uuid())
+  title String
+  companyId String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}

@@ -91,3 +91,35 @@ userRouter.post('signin' , async(c) => {
         jwt
     });
 });
+
+userRouter.get('/upload/jobs', async(c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl : c.env?.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    const adminId = c.get('userId');
+    const admin = await prisma.user.findUnique({
+        where : {
+            id : adminId
+        },
+        include: {
+            job: true // This includes the `job` relation
+        }
+    });
+    if(!admin) {
+        c.status(403);
+        return c.json({
+            msg : "error occured"
+        });
+    }
+    return c.json({
+        email: admin.email,
+        name: admin.name,
+        jobs: admin.job.map(job => ({
+            title: job.title, // Assuming `Job` has a `title` field
+            companyId : job.companyId// Assuming `Job` has a `department` field
+        }))
+    });
+
+
+})

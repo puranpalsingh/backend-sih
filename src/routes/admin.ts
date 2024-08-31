@@ -15,7 +15,7 @@ export const adminRouter = new Hono<{
     }
 }>();
 
-adminRouter.use('/upload/*' , async(c, next) => {
+adminRouter.use('/company/*' , async(c, next) => {
     const jwt = c.req.header('Authorization');
     if(!jwt) {
         c.status(401);
@@ -123,4 +123,38 @@ adminRouter.post('/job', async(c) => {
             msg : "error occured"
         })
     }
-})
+});
+
+adminRouter.get('/company/dashboard',async(c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl : c.env?.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    const adminId = c.get('AdminId');
+    const admin = await prisma.admin.findUnique({
+        where : {
+            id : adminId
+        },
+        include: {
+            job: true // This includes the `job` relation
+        }
+    });
+    if(!admin) {
+        c.status(403);
+        return c.json({
+            msg : "error occured"
+        });
+    }
+    return c.json({
+        email: admin.email,
+        firstName: admin.firstName,
+        companyName: admin.lastName,
+        jobs: admin.job.map(job => ({
+            title: job.title, // Assuming `Job` has a `title` field
+            department: job.post// Assuming `Job` has a `department` field
+            // Add other fields from `Job` as needed
+        }))
+    });
+});
+
+
